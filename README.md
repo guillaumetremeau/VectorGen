@@ -1,2 +1,2 @@
-# VectrorGen
+# VectorGen
 vecteur dynamique generique (template)
