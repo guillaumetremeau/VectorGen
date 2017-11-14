@@ -5,7 +5,7 @@
 #include "VectorGen.hpp"
 
 TEST_CASE ("Vecteur1") {
-  const Vecteur v;
+  const VectorGen<int> v;
 
   REQUIRE ( v.capacity() >= 10 );
   REQUIRE ( v.size()     == 0  );
@@ -13,14 +13,14 @@ TEST_CASE ("Vecteur1") {
 
 
 TEST_CASE ("Vecteur2" ) {
-  Vecteur v(20);
+  VectorGen<int> v(20);
 
   REQUIRE ( v.capacity() == 20 );
   REQUIRE ( v.size()     == 0  );
 }
 
 TEST_CASE ("Vecteur3" ) {
-  Vecteur v(5);
+  VectorGen<double> v(5);
 
   SECTION("ajout de quelques elements") {
     REQUIRE ( v.capacity() == 5 );
@@ -49,11 +49,23 @@ TEST_CASE ("Vecteur3" ) {
     REQUIRE( v.size()     ==  25 );
 
     for (int i=0; i<25; ++i)
-      CHECK(v[i] == Approx(i*1.0+0.1));  // :-)
+      CHECK(v[i] == Approx(i*1.0));
   }
 
   SECTION("on verifie les exceptions") {
-    REQUIRE_THROWS_AS( v[-1] == 0, Vecteur::OutOfRangeException);
-    REQUIRE_THROWS_AS( v [6] == 0, std::bad_alloc);  // :-)
+    REQUIRE_THROWS_AS( v[-1] == 0, std::out_of_range);
+    REQUIRE_THROWS_AS( v [6] == 0, std::out_of_range);
    }
+}
+TEST_CASE("Operator +"){
+    VectorGen<int> v1(3);
+    VectorGen<int> v2(3);
+    for(int i = 0;i< 3; i++){
+        v1.push_back(i);
+        v2.push_back(i + 3);
+    }
+    VectorGen<int> vRes = v1 + v2;
+    for(int i = 0; i<6; i++){
+        REQUIRE(vRes[i] == i);
+    }
 }
